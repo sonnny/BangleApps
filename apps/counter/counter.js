@@ -95,7 +95,7 @@ if (BANGLEJS2) {
 g.clear(1).setFont("6x8");
 g.setBgColor(g.theme.bg).setColor(g.theme.fg);
 if (BANGLEJS2) { 
- g.drawString('Swipe up to increase\nSwipe down to decrease\nPress button to reset.', x, 100 + y);
+ g.drawString('Sonny up to increase\nSwipe down to decrease\nPress button to reset.', x, 100 + y);
 } else {
  g.drawString('Tap right or BTN1 to increase\nTap left or BTN3 to decrease\nPress BTN2 to reset.', x, 100 + y);
 }
