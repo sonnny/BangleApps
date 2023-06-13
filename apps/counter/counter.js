@@ -1,9 +1,17 @@
 let drag;
+var tx;
 
-function sendText(s){
-  g.clear();
-  g.setFont("6x8:2");
-  g.drawString(s,50,50);
+function connect(){
+ NRF.connect("28:CD:C1:01:8D:5F").then(function(g) {
+  return g.getPrimaryService("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
+}).then(function(service) {
+  return service.getCharacteristic("6e400002-b5a3-f393-e0a9-e50e24dcca9e");
+}).then(function(characteristic) {
+   g.setColor(0,1,0);
+  g.fillCircle(10,145,10); 
+   tx = characteristic;
+  return;
+});
 }
 
 function init() {
@@ -16,31 +24,34 @@ Bangle.on("drag", e => {
 			if (Math.abs(dx)>Math.abs(dy)+10) {
 				// horizontal
 				if (dx < dy) {
-					console.log("left " + dx + " " + dy);
-					sendText("left");
+					tx.writeValue(0x6c);
+					//sendText("left");
 				} else {
-					console.log("right " + dx + " " + dy);
-					sendText("right");
+					tx.writeValue(0x72);
+					//sendText("right");
 				}
 			} else if (Math.abs(dy)>Math.abs(dx)+10) {
 				 //vertical
 				if (dx < dy) {
-					console.log("down " + dx + " " + dy);
-					sendText("down");
+					tx.writeValue(0x66);
+					//sendText("down");
 				} else {
-					console.log("up " + dx + " " + dy);
-					sendText("up");
+					tx.writeValue(0x62);
+					//sendText("up");
 				}
 			} else {
-          if (e.x > 140 && e.y > 140) {console.log(" "+e.x+" "+e.y);sendText("lower right");}
-			    else if (e.x < 45 && e.y < 45)   {console.log(" "+e.x+" "+e.y);sendText("upper left");}
-			    else if (e.x > 140 && e.y < 45)  {console.log(" "+e.x+" "+e.y);sendText("upper right");}
-			    else if (e.x < 45 && e.y > 140)  {console.log(" "+e.x+" "+e.y);sendText("lower left");}
+          if (e.x > 140 && e.y > 140) {tx.writeValue(0x73);}//lower right
+			    else if (e.x < 45 && e.y < 45)   {console.log(" "+e.x+" "+e.y);}
+			    else if (e.x > 140 && e.y < 45)  {console.log(" "+e.x+" "+e.y);}
+			    else if (e.x < 45 && e.y > 140)  {connect();}//lower right
       }
 			
 		} // else released
 });
 }
 g.clear();
+g.setColor(0,0,0);
 g.drawString("start swiping...",50,50);
+g.setColor(1,0,0);
+g.fillCircle(145,145,10);
 init();
